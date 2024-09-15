@@ -1,0 +1,30 @@
+version: '3'
+services:
+  db:
+    image: postgres
+    container_name: autogear_db
+    restart: always
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    environment:
+      POSTGRES_DB: 'autogear'
+      POSTGRES_USER: 'admin'
+      POSTGRES_PASSWORD: 'password'
+    ports:
+      - "5432:5432"
+  
+  backend:
+    build: 
+      context: .
+      dockerfile: Dockerfile
+    container_name: autogear_api
+    command: sh -c "python3 manage.py runserver 0.0.0.0:8000"
+    restart: always
+    volumes:
+      - .:/app
+    ports:
+      - "8000:8000"
+    depends_on:
+      - db
+volumes:
+  postgres_data:
