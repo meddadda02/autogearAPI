@@ -3,6 +3,8 @@ from rest_framework.response import Response
 from .models import Car,Brand,Image,Garage
 from .serializers import CarSerializer,BrandSerializer,ImageSerializer,GarageSerializer
 from rest_framework import status
+from django.shortcuts import get_object_or_404
+
 @api_view(['GET','POST','DELETE'])
 def List_cars(request):
     if request.method=="GET":
@@ -86,18 +88,30 @@ def Garage_detail(request,pk):
         return Response("your id "f"{pk}"" was not found",status=status.HTTP_400_BAD_REQUEST)
     
     
-@api_view(['GET','POST'])
+@api_view(['GET', 'POST'])
 def List_image(request):
-    if request.method=='GET':
-        image=Image.objects.all()
-        image_serializers=ImageSerializer(image,many=True)
+    if request.method == 'GET':
+        images = Image.objects.all()
+        image_serializers = ImageSerializer(images, many=True)
         return Response(image_serializers.data)
-    if request.method=='POST':
-        image_serializers=ImageSerializer(data=request.data)
+
+    if request.method == 'POST':
+        car_id = request.data.get('car_id')
+
+        if not car_id:
+            return Response({"error": "Car ID is required"}, status=status.HTTP_400_BAD_REQUEST)
+        car = get_object_or_404(Car, id=car_id)
+
+        if 'image_file' not in request.FILES:
+            return Response({"error": "Image file is required"}, status=status.HTTP_400_BAD_REQUEST)
+        image_data = {'image': request.FILES['image_file'], 'idcar': car.id}
+        image_serializers = ImageSerializer(data=image_data)
+
         if image_serializers.is_valid():
-            image=image_serializers.save()
-            return Response(image_serializers.data,status=status.HTTP_201_CREATED)
-    return Response("invalid",status=status.HTTP_400_BAD_REQUEST)
+            image_serializers.save()
+            return Response(image_serializers.data, status=status.HTTP_201_CREATED)
+
+        return Response(image_serializers.errors, status=status.HTTP_400_BAD_REQUEST)
 
 
 @api_view(['GET'])
