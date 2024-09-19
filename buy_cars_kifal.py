@@ -75,7 +75,7 @@ def main():
                     for line in cartype_element:
                         if 'Type de voiture' in line.text:
                             cartype_text = line.find('span', {'class':'float-right'}).text.strip()
-                            # Extraire uniquement la première partie avant le '/'
+                            # Extraire uniquement la première partie avant le /
                             if cartype_text:
                                 cartype = cartype_text.split('/')[0].strip()
                             break
@@ -85,7 +85,7 @@ def main():
                     doors_element = car_soup.find_all('div', class_='col-12 col-lg-6 mb-2')
                     for line in doors_element:
                         if 'Nombre de portes' in line.text.strip():
-                            doors_span = line.find_all('span')[1]  # Le deuxième <span> contient le poids
+                            doors_span = line.find_all('span')[1]  # Le deuxième <span> contient le nombre des portes
                             if doors_span:
                                 doors_text = doors_span.text.strip()
                                 doors = ''.join(filter(str.isdigit, doors_text))
@@ -97,7 +97,7 @@ def main():
                     seats_element = car_soup.find_all('div', class_='col-12 col-lg-6 mb-2')
                     for line in seats_element:
                         if 'Nombre de places' in line.text.strip():
-                            seats_span = line.find_all('span')[1]  # Le deuxième <span> contient le poids
+                            seats_span = line.find_all('span')[1]  # Le deuxième <span> contient le nombre des places
                             if seats_span:
                                 seats_text = seats_span.text.strip()
                                 seats = ''.join(filter(str.isdigit, seats_text))
@@ -119,7 +119,7 @@ def main():
                     
                     fuel = car_soup.find('p', {'itemprop': 'fuelType'}).text.strip() if car_soup.find('p', {'itemprop': 'fuelType'}) else None
                     
-                    # Extraction garage       
+                    # Extraction garage  name     
                     parsed_url = urlparse(link)
                     garage = parsed_url.netloc
 
