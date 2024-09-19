@@ -39,7 +39,7 @@ def main():
                     else:
                         brand, model = None, None
 
-                    # Extraction du prix
+                    # Extraction price
                     price_element = car_soup.find('div', {'class': 'color_primary text_bold price-block'})
                     if price_element:
                         price_text = price_element.text.strip()
@@ -48,7 +48,7 @@ def main():
                     else:
                         price = None
 
-                    # Extraction de l'année
+                    # Extraction year
                     year = None
                     year_element = car_soup.find_all('div', class_='detail_line')
                     for line in year_element:
@@ -58,7 +58,7 @@ def main():
                             year = int(year) if year else None
                             break
 
-                    # Extraction du kilométrage
+                    # Extraction mileage
                     mileage = None
                     mileage_element = car_soup.find_all('div', class_='detail_line')
                     for line in mileage_element:
@@ -68,7 +68,7 @@ def main():
                             mileage = int(mileage) if mileage else None
                             break
 
-                    # Extraction de la boîte de vitesses
+                    # Extraction gearbox
                     gearbox = None
                     gearbox_element = car_soup.find_all('div', class_='detail_line')
                     for line in gearbox_element:
@@ -77,7 +77,7 @@ def main():
                             gearbox = gearbox_text if gearbox_text else None
                             break
 
-                    # Extraction du carburant
+                    # Extraction fuel
                     fuel = None
                     fuel_element = car_soup.find_all('div', class_='detail_line')
                     for line in fuel_element:
@@ -86,7 +86,7 @@ def main():
                             fuel = fuel_text if fuel_text else None
                             break
 
-                    # Extraction du type de carrosserie
+                    # Extraction cartype
                     cartype = None
                     cartype_element = car_soup.find_all('div', class_='detail_line')
                     for line in cartype_element:
@@ -96,7 +96,7 @@ def main():
                                 cartype = cartype_text.split('et')[0].strip()
                             break
 
-                    # Extraction de la puissance fiscale
+                    # Extraction hp
                     hp = None
                     hp_element = car_soup.find_all('div', class_='detail_line')
                     for line in hp_element:
@@ -116,7 +116,7 @@ def main():
                             doors = int(doors) if doors else None
                             break
 
-                    # Extraction du nom du site (garage)
+                    # Extraction name
                     parsed_url = urlparse(link)
                     garage = parsed_url.netloc  # Récupère le nom de domaine
 
